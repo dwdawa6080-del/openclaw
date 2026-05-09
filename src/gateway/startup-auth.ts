@@ -216,15 +216,21 @@ export async function ensureGatewayStartupAuth(params: {
       },
     },
   };
-  const persist = shouldPersistGeneratedToken({
+  let persisted = shouldPersistGeneratedToken({
     persistRequested,
     resolvedAuth: resolved,
   });
-  if (persist) {
-    await replaceConfigFile({
-      nextConfig: nextCfg,
-      baseHash: params.baseHash,
-    });
+  if (persisted) {
+    try {
+      await replaceConfigFile({
+        nextConfig: nextCfg,
+        baseHash: params.baseHash,
+      });
+    } catch {
+      // State directory may not be writable (e.g. Railway without a mounted
+      // volume, or a read-only filesystem). Token stays ephemeral for this run.
+      persisted = false;
+    }
   }
 
   const nextAuth = resolveGatewayAuthFromConfig({
@@ -243,7 +249,7 @@ export async function ensureGatewayStartupAuth(params: {
     cfg: nextCfg,
     auth: nextAuth,
     generatedToken,
-    persistedGeneratedToken: persist,
+    persistedGeneratedToken: persisted,
   };
 }
 

@@ -297,5 +297,12 @@ export function resolveGatewayPort(
       return configPort;
     }
   }
+  // Railway, Heroku, Render, and similar PaaS platforms inject PORT.
+  // Fall back to it so the gateway binds on the correct port even when
+  // OPENCLAW_GATEWAY_PORT is not explicitly set in the deployment env.
+  const paasPort = parseGatewayPortEnvValue(env.PORT?.trim());
+  if (paasPort !== null) {
+    return paasPort;
+  }
   return DEFAULT_GATEWAY_PORT;
 }
