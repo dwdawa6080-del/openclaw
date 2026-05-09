@@ -1,0 +1,28 @@
+# Railway deployment configuration for OpenClaw
+# https://docs.railway.com/reference/config-as-code
+#
+# Required environment variables (set in the Railway dashboard):
+#   OPENCLAW_GATEWAY_PORT  = ${{PORT}}          (map Railway's dynamic port)
+#   OPENCLAW_STATE_DIR     = /data/.openclaw    (persistent state on the volume)
+#   OPENCLAW_GATEWAY_TOKEN = <secret>           (shared auth token for clients)
+#
+# Required volume (add in Railway dashboard):
+#   Mount path: /data   (holds state, credentials, and sessions across deploys)
+#
+# Optional:
+#   NODE_OPTIONS = --max-old-space-size=1536    (for 2 GiB instances)
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+# Pass $PORT directly so Railway's dynamic port reaches the gateway listener.
+# OPENCLAW_GATEWAY_PORT is the canonical env override; --port is the CLI flag.
+# Both are set here so either resolution path picks up the right value.
+startCommand = "node openclaw.mjs gateway --bind lan --allow-unconfigured --port $PORT"
+healthcheckPath = "/healthz"
+# Gateway takes ~10–15 s to start; give it 60 s before Railway marks it unhealthy.
+healthcheckTimeout = 60
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10
