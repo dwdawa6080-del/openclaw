@@ -314,7 +314,6 @@ export function createRuntimeChannel(): PluginRuntime["channel"] {
         });
         return { dispose };
       },
-      // oxlint-disable-next-line typescript/no-unnecessary-type-parameters -- Runtime context values are caller-typed by key.
       get: <T = unknown>(params: PluginRuntimeChannelContextKey) => {
         const normalized = normalizeRuntimeContextKey(params);
         if (!normalized) {

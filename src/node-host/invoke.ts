@@ -560,7 +560,6 @@ export async function handleInvoke(
   });
 }
 
-// oxlint-disable-next-line typescript/no-unnecessary-type-parameters -- CLI JSON params are typed by the invoked method.
 function decodeParams<T>(raw?: string | null): T {
   if (!raw) {
     throw new Error("INVALID_REQUEST: paramsJSON required");

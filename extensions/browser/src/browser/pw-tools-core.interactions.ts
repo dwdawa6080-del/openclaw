@@ -783,7 +783,6 @@ export async function evaluateViaPlaywright(opts: {
     if (opts.ref) {
       const locator = refLocator(page, opts.ref);
       const previousUrl = page.url();
-      // eslint-disable-next-line @typescript-eslint/no-implied-eval -- required for browser-context eval
       const elementEvaluator = new Function(
         "el",
         "args",
@@ -823,7 +822,6 @@ export async function evaluateViaPlaywright(opts: {
     }
 
     const previousUrl = page.url();
-    // eslint-disable-next-line @typescript-eslint/no-implied-eval -- required for browser-context eval
     const browserEvaluator = new Function(
       "args",
       `

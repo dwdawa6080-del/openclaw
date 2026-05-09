@@ -51,7 +51,7 @@ for file in "${files[@]}"; do
 done
 
 if [ "${#lint_files[@]}" -gt 0 ]; then
-  "$RUN_NODE_TOOL" oxlint --type-aware --fix -- "${lint_files[@]}"
+  "$RUN_NODE_TOOL" oxlint --fix -- "${lint_files[@]}"
 fi
 
 if [ "${#format_files[@]}" -gt 0 ]; then

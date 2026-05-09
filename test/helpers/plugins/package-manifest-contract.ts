@@ -22,7 +22,6 @@ type PackageManifestContractParams = {
   minHostVersionBaseline?: string;
 };
 
-// oxlint-disable-next-line typescript/no-unnecessary-type-parameters -- Test helper lets assertions ascribe package manifest shape.
 function readJson<T>(relativePath: string): T {
   const absolutePath = path.resolve(process.cwd(), relativePath);
   return JSON.parse(fs.readFileSync(absolutePath, "utf8")) as T;
